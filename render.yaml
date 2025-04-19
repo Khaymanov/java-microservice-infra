@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: java-microservice-infra
+    runtime: docker
+    plan: free
+    autoDeploy: true
+    buildCommand: "./gradlew build -x test"
+    startCommand: "java -jar build/libs/java-microservice-infra.jar"
+    healthCheckPath: /
+    envVars:
+      - key: JAVA_VERSION
+        value: 17
+
+
+
