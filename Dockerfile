@@ -1,21 +1,22 @@
-# 🔹 Базовый образ c Java 17
+# 🔹 Базовый образ с Java 17
 FROM eclipse-temurin:17-jdk-alpine
 
 # 🔹 Устанавливаем рабочую директорию
 WORKDIR /app
 
-# 🔹 Копируем файлы Gradle и зависимости
-COPY gradlew build.gradle settings.gradle ./
+# 🔹 Копируем Gradle скрипты из корня
+COPY gradlew gradlew.bat ./ 
 COPY gradle ./gradle
 
-# 🔹 Кэшируем зависимости
-RUN ./gradlew build -x test || return 0
+# 🔹 Копируем файлы из подпроекта app
+COPY app/build.gradle ./build.gradle
+COPY settings.gradle ./settings.gradle
+COPY app/src ./src
 
-# 🔹 Копируем остальной проект
-COPY . .
-
-# 🔹 Сборка финального jar (без тестов пока)
-RUN ./gradlew build -x test
+# 🔹 Скачиваем зависимости и собираем проект
+RUN ./gradlew build --no-daemon
 
 # 🔹 Запускаем приложение
-CMD ["java", "-jar", "build/libs/java-microservice-infra.jar"]
+CMD ["./gradlew", "bootRun"]
+
+

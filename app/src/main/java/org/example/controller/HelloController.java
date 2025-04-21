@@ -18,5 +18,9 @@ public class HelloController {
     public HelloResponse hello() {
         return helloService.getGreeting();
     }
+
+    @GetMapping("/info")
+    public String info() { return "Информация о микросервисе"; }
+    
 }
 
